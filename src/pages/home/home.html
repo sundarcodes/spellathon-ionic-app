@@ -1,14 +1,38 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Ionic Blank
+      Spellathon
     </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+  <ion-list>
+    <ion-item>
+      <ion-textarea [(ngModel)]="lettersList" placeholder="Enter the letters you want to find the dictionary words for" #input (keyup)="onLetterPress(input.value)"></ion-textarea>
+    </ion-item>
+    <ion-item>
+      <ion-label>Pick the mandatory Letter</ion-label>
+    </ion-item>
+    <button ion-button [color]="btnSelected[letter] ? '':'light'" *ngFor="let letter of lettersArr$ | async" (click)="letterChosen(letter)">
+      {{letter | uppercase}}
+    </button>
+    <!--<ion-item>
+      <ion-label>Minimum Word Length <ion-badge>{{wordLength}}</ion-badge></ion-label>
+      <ion-range min="4" max="maxLength$ | async" step="1" [(ngModel)]="wordLength" color="secondary">
+        <ion-label range-left>4</ion-label>
+        <ion-label range-right>{{maxLength$ | async}}</ion-label>
+      </ion-range>
+    </ion-item>-->
+  </ion-list>
+  <button ion-button color="default" (click)="fetchDictionaryWords()">
+    Get Dictionary Words
+  </button>
+
+  <ion-list>
+  <ion-list-header>
+    Dictionary Words
+  </ion-list-header>
+  <ion-item *ngFor="let word of dictWords$ | async">{{word}}</ion-item>
+</ion-list>
 </ion-content>
