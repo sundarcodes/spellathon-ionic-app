@@ -9,10 +9,11 @@
 <ion-content padding>
   <ion-list>
     <ion-item>
-      <ion-textarea [(ngModel)]="lettersList" placeholder="Enter the letters you want to find the dictionary words for" #input (keyup)="onLetterPress(input.value)"></ion-textarea>
+      <ion-label stacked>List of letters </ion-label>
+      <ion-input type="text" min="3" max="10" [(ngModel)]="lettersList" placeholder="Enter the letters you want to find the dictionary words for" #input (keyup)="onLetterPress(input.value)"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label>Pick the mandatory Letter</ion-label>
+      <ion-label stacked >Pick the mandatory Letter</ion-label>
     </ion-item>
     <button ion-button [color]="btnSelected[letter] ? '':'light'" *ngFor="let letter of lettersArr$ | async" (click)="letterChosen(letter)">
       {{letter | uppercase}}
@@ -30,9 +31,9 @@
   </button>
 
   <ion-list>
-  <ion-list-header>
-    Dictionary Words
-  </ion-list-header>
+    <ion-list-header>
+      Dictionary Words
+    </ion-list-header>
   <ion-item *ngFor="let word of dictWords$ | async">{{word}}</ion-item>
 </ion-list>
 </ion-content>

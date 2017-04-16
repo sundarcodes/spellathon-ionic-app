@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, LoadingController } from 'ionic-angular';
 import { Http, Headers } from '@angular/http'
 import { Observable, BehaviorSubject } from 'rxjs';
 
@@ -18,7 +18,7 @@ export class HomePage {
   dictWords$: Observable<any>;
   // lettersArr: string
   lettersListSub: BehaviorSubject<string[]>;
-  constructor(public navCtrl: NavController, private _http: Http) {
+  constructor(public navCtrl: NavController, private _http: Http, private _loadingCtrl: LoadingController) {
     this.lettersList = "";
     this.lettersListSub = new BehaviorSubject([]);
     this.lettersArr$ = this.lettersListSub.asObservable();
@@ -32,7 +32,6 @@ export class HomePage {
     console.log(letters);
     this.lettersListSub.next(letters.split(''));
     this.count.next(letters.length);
-    // this.lettersListSub.complete();
   }
 
   letterChosen(letter) {
@@ -47,7 +46,15 @@ export class HomePage {
     const url: string = `https://y7g9yey5yc.execute-api.us-east-1.amazonaws.com/dev/dict?letters=${this.lettersList}&mand=${this.mandatoryLetter}&length=4`;
     // let header = new Headers('C)
     let headers = new Headers({'Content-Type': 'application/json'});
+    let loading = this._loadingCtrl.create({
+      content: 'Please wait...'
+    });
+
+    loading.present();
     this.dictWords$ = this._http.get(url, headers)
-    .map(data => data.json().message);
+    .map(data => {
+     loading.dismiss();
+     return data.json().message;
+    });
   }
 }
