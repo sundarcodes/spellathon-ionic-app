@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
 import { NavController, LoadingController } from 'ionic-angular';
 import { Http, Headers } from '@angular/http'
 import { Observable, BehaviorSubject } from 'rxjs';
@@ -8,8 +9,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
   templateUrl: 'home.html'
 })
 export class HomePage {
-
-  lettersList: string;
+  
   lettersArr$: Observable<string[]>;
   count: BehaviorSubject<number>;
   maxLength$: Observable<number>;
@@ -17,15 +17,19 @@ export class HomePage {
   mandatoryLetter: string;
   dictWords$: Observable<any>;
   // lettersArr: string
+  letterInput: any;
   lettersListSub: BehaviorSubject<string[]>;
-  constructor(public navCtrl: NavController, private _http: Http, private _loadingCtrl: LoadingController) {
-    this.lettersList = "";
+  constructor(public navCtrl: NavController, private _http: Http, private _loadingCtrl: LoadingController
+  , private _formBuilder: FormBuilder) {
     this.lettersListSub = new BehaviorSubject([]);
     this.lettersArr$ = this.lettersListSub.asObservable();
     this.maxLength$ = this.lettersArr$.count();
     this.count = new BehaviorSubject(0);
     this.maxLength$ = this.count.asObservable();
     this.btnSelected = {};
+    this.letterInput = this._formBuilder.group({
+      lettersList: ['', Validators.compose([Validators.maxLength(10), Validators.required, Validators.minLength(4)])]
+    })
   }
 
   onLetterPress(letters) {
@@ -43,7 +47,7 @@ export class HomePage {
 
 
   fetchDictionaryWords() {
-    const url: string = `https://y7g9yey5yc.execute-api.us-east-1.amazonaws.com/dev/dict?letters=${this.lettersList}&mand=${this.mandatoryLetter}&length=4`;
+    const url: string = `https://y7g9yey5yc.execute-api.us-east-1.amazonaws.com/dev/dict?letters=${this.letterInput.value.lettersList}&mand=${this.mandatoryLetter}&length=4`;
     // let header = new Headers('C)
     let headers = new Headers({'Content-Type': 'application/json'});
     let loading = this._loadingCtrl.create({

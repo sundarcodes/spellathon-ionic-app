@@ -8,10 +8,11 @@
 
 <ion-content padding>
   <ion-list>
-    <ion-item>
-      <ion-label stacked>List of letters </ion-label>
-      <ion-input type="text" min="3" max="10" [(ngModel)]="lettersList" placeholder="Enter the letters you want to find the dictionary words for" #input (keyup)="onLetterPress(input.value)"></ion-input>
-    </ion-item>
+    <form [formGroup]="letterInput">
+      <ion-item>
+        <ion-label stacked>List of letters </ion-label>
+        <ion-input type="text" formControlName="lettersList" placeholder="Enter the letters you want to find the dictionary words for" #input (keyup)="onLetterPress(input.value)"></ion-input>
+      </ion-item>
     <ion-item>
       <ion-label stacked >Pick the mandatory Letter</ion-label>
     </ion-item>
@@ -25,11 +26,13 @@
         <ion-label range-right>{{maxLength$ | async}}</ion-label>
       </ion-range>
     </ion-item>-->
-  </ion-list>
-  <button ion-button color="default" (click)="fetchDictionaryWords()">
+    <div>
+  <button ion-button color="default"  [disabled]="letterInput.invalid" (click)="fetchDictionaryWords()">
     Get Dictionary Words
   </button>
-
+  </div>
+</form>
+</ion-list>
   <ion-list>
     <ion-list-header>
       Dictionary Words
