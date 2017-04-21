@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormControl } from '@angular/forms';
 import { NavController, LoadingController } from 'ionic-angular';
 import { Http, Headers } from '@angular/http'
 import { Observable, BehaviorSubject } from 'rxjs';
@@ -28,21 +28,34 @@ export class HomePage {
     this.maxLength$ = this.count.asObservable();
     this.btnSelected = {};
     this.letterInput = this._formBuilder.group({
-      lettersList: ['', Validators.compose([Validators.maxLength(10), Validators.required, Validators.minLength(4)])]
+      lettersList: ['', Validators.compose([Validators.maxLength(10), Validators.required, Validators.minLength(4),
+      Validators.pattern("[a-z]*")])],
+      mandLetter: ['', Validators.required]
     })
   }
 
-  onLetterPress(letters) {
-    console.log(letters);
+  onLetterPress(letters: string) {
+    // console.log(letters.toLowerCase());
     this.lettersListSub.next(letters.split(''));
     this.count.next(letters.length);
+    this.mandatoryLetter = '';
+    this.btnSelected = {};
   }
 
   letterChosen(letter) {
     console.log(letter);
-    this.btnSelected = {};
+    // this.btnSelected = {};
     this.btnSelected[letter] = !this.btnSelected[letter]
     this.mandatoryLetter = letter;
+  }
+
+  validateLetterSelected(c: FormControl) {
+    console.log(c.value);
+    return c.value ? null : {
+      validateEmail: {
+        valid: false
+      }
+    };
   }
 
 

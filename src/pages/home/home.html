@@ -11,7 +11,7 @@
     <form [formGroup]="letterInput">
       <ion-item>
         <ion-label stacked>List of letters </ion-label>
-        <ion-input type="text" formControlName="lettersList" placeholder="Enter the letters you want to find the dictionary words for" #input (keyup)="onLetterPress(input.value)"></ion-input>
+        <ion-input type="text" formControlName="lettersList" placeholder="Enter the letters you want to find the dictionary words for" #input (keyup)="onLetterPress(input.value)" autocapitalize="off"></ion-input>
       </ion-item>
     <ion-item>
       <ion-label stacked >Pick the mandatory Letter</ion-label>
@@ -19,6 +19,7 @@
     <button ion-button [color]="btnSelected[letter] ? '':'light'" *ngFor="let letter of lettersArr$ | async" (click)="letterChosen(letter)">
       {{letter | uppercase}}
     </button>
+    <ion-input type="text" formControlName="mandLetter" [(ngModel)]="mandatoryLetter" hidden></ion-input>
     <!--<ion-item>
       <ion-label>Minimum Word Length <ion-badge>{{wordLength}}</ion-badge></ion-label>
       <ion-range min="4" max="maxLength$ | async" step="1" [(ngModel)]="wordLength" color="secondary">
